@@ -1,0 +1,29 @@
+# Hellcord: Cloudflare Worker + D1 (accounts, servers, messages) + Backblaze B2 (files) + Xkiro (bots)
+#
+# Deploy, in order:
+#   npx wrangler d1 migrations apply DB --remote
+#   npx wrangler deploy
+#
+# Secrets (B2_KEY_ID, B2_APPLICATION_KEY, XKIRO_API_KEY) are set with `wrangler secret put` and are not in this file.
+
+name = "hellcord"
+main = "src/index.js"
+compatibility_date = "2026-01-01"
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+run_worker_first = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "8czwrupcdh4r"
+database_id = "3d3e927b-75bb-45b9-9a28-facda144f6f9"
+migrations_dir = "migrations"
+
+[vars]
+B2_BUCKET = "hellcord"
+B2_ENDPOINT = "s3.us-east-005.backblazeb2.com"
+B2_REGION = "us-east-005"
+XKIRO_BASE_URL = "https://api.xkiro.com/v1"
+XKIRO_BOT_MODEL = "qwen/qwen3.8-max:free"
